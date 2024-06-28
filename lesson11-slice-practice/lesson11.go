@@ -3,7 +3,6 @@ package main
 import "fmt"
 
 func main() {
-
 	// range는 range(시작숫자, 종료숫자, step)의 형태로 리스트 슬라이싱과 유사합니다.
 	// range의 결과는 시작숫자부터 종료숫자 바로 앞 숫자까지 컬렉션을 만듭니다.
 	// 시작숫자와 step은 생략할 수 있습니다.

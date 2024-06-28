@@ -3,7 +3,6 @@ package main
 import "fmt"
 
 func main() {
-
 	// go에서는 배열보다 slice를 더 많이 사용
 	// 그 이유는 배열보다 slice가 더 유연하기 때문 (배열: 길이가 정적 / slice: 길이가 가변적)
 	// slice 구성은 lesson10-slice-image.jpg 참고
