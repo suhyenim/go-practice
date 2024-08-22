@@ -5,6 +5,7 @@ go mod tidy
 
 # gin
 go get -u github.com/gin-gonic/gin  
+http://localhost:8080  
 
 # swagger
 go get -u github.com/swaggo/gin-swagger  
@@ -24,11 +25,7 @@ http://localhost:8081 (admin/pass)
 docker-compose up --build  
 docker-compose ps  
 docker-compose logs  
-docker-compose down
-http://localhost:8080  
-
-
-
+docker-compose down  
 
 ---
 # reference
