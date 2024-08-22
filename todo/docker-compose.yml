@@ -1,22 +1,20 @@
 version: '3.8'
 
 services:
-  backend:
-    build: backend
+  mongo:
+    image: mongo:latest
+    container_name: mongo
+    restart: always
     ports:
-      - "8080:8080"
-    environment:
-      - MONGO_URI=mongodb://mongo:27017
+      - "27017:27017"
+    command: ["mongod", "--noauth"]
+
+  mongo-express:
+    image: mongo-express:latest
+    container_name: mongo-express
+    restart: always
+    ports:
+      - "8081:8081"
     depends_on:
       - mongo
 
-  mongo:
-    image: mongo:6.0
-    container_name: mongodb
-    ports:
-      - "27017:27017"
-    volumes:
-      - mongo-data:/data/db
-
-volumes:
-  mongo-data:

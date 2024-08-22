@@ -17,31 +17,35 @@ const docTemplate = `{
     "paths": {
         "/api/todos": {
             "get": {
-                "description": "Retrieve a list of all todos",
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
-                    "todos"
+                    "Todo"
                 ],
                 "summary": "Get all todos",
                 "responses": {
                     "200": {
-                        "description": "OK",
+                        "description": "List of all Todo items\"               // 성공 시 모든 Todo 항목을 배열로 반환",
                         "schema": {
                             "type": "array",
                             "items": {
-                                "type": "object",
-                                "additionalProperties": {
-                                    "type": "string"
-                                }
+                                "$ref": "#/definitions/main.Todo"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error\"  // 서버 내부 오류 발생 시 500 오류 반환",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
                             }
                         }
                     }
                 }
             },
             "post": {
-                "description": "Create a new todo item",
                 "consumes": [
                     "application/json"
                 ],
@@ -49,12 +53,38 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "todos"
+                    "Todo"
                 ],
                 "summary": "Create a new todo",
+                "parameters": [
+                    {
+                        "description": "Todo item to create",
+                        "name": "todo",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/main.CreateTodoRequest"
+                        }
+                    }
+                ],
                 "responses": {
                     "201": {
-                        "description": "Created",
+                        "description": "Created Todo item\"                // 성공적으로 생성된 Todo 항목을 반환",
+                        "schema": {
+                            "$ref": "#/definitions/main.Todo"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid request body\" // 요청 본문이 유효하지 않을 경우 400 오류 반환",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error\" // 서버 내부 오류 발생 시 500 오류 반환",
                         "schema": {
                             "type": "object",
                             "additionalProperties": {
@@ -67,12 +97,11 @@ const docTemplate = `{
         },
         "/api/todos/{id}": {
             "get": {
-                "description": "Retrieve details of a specific todo by ID",
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
-                    "todos"
+                    "Todo"
                 ],
                 "summary": "Get a specific todo",
                 "parameters": [
@@ -86,7 +115,31 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "OK",
+                        "description": "Todo item retrieved successfully\"     // 성공 시 조회된 Todo 항목 반환",
+                        "schema": {
+                            "$ref": "#/definitions/main.Todo"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid ID format\"       // ID 형식 오류 시 400 오류 반환",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Todo not found\"          // 해당 ID의 Todo 항목이 없을 경우 404 오류 반환",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error\"   // 서버 내부 오류 발생 시 500 오류 반환",
                         "schema": {
                             "type": "object",
                             "additionalProperties": {
@@ -97,7 +150,6 @@ const docTemplate = `{
                 }
             },
             "put": {
-                "description": "Update details of an existing todo by ID",
                 "consumes": [
                     "application/json"
                 ],
@@ -105,7 +157,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "todos"
+                    "Todo"
                 ],
                 "summary": "Update an existing todo",
                 "parameters": [
@@ -115,11 +167,35 @@ const docTemplate = `{
                         "name": "id",
                         "in": "path",
                         "required": true
+                    },
+                    {
+                        "description": "Todo item to update",
+                        "name": "todo",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/main.UpdateTodoRequest"
+                        }
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "OK",
+                        "description": "Updated Todo item\"                         // 성공 시 업데이트된 Todo 항목 반환",
+                        "schema": {
+                            "$ref": "#/definitions/main.Todo"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid ID format or request\" // ID 형식 또는 요청 본문 오류 시 400 오류 반환",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error\"        // 서버 내부 오류 발생 시 500 오류 반환",
                         "schema": {
                             "type": "object",
                             "additionalProperties": {
@@ -130,12 +206,11 @@ const docTemplate = `{
                 }
             },
             "delete": {
-                "description": "Delete a todo item by ID",
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
-                    "todos"
+                    "Todo"
                 ],
                 "summary": "Delete a todo",
                 "parameters": [
@@ -149,7 +224,25 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "OK",
+                        "description": "Todo item deleted successfully\" // 성공 시 삭제된 Todo 항목의 ID 반환",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid ID format\"            // ID 형식 오류 시 400 오류 반환",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error\"        // 서버 내부 오류 발생 시 500 오류 반환",
                         "schema": {
                             "type": "object",
                             "additionalProperties": {
@@ -157,6 +250,52 @@ const docTemplate = `{
                             }
                         }
                     }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "main.CreateTodoRequest": {
+            "type": "object",
+            "properties": {
+                "content": {
+                    "type": "string"
+                }
+            }
+        },
+        "main.Todo": {
+            "type": "object",
+            "properties": {
+                "content": {
+                    "description": "Todo의 내용",
+                    "type": "string"
+                },
+                "created_at": {
+                    "description": "생성 시간",
+                    "type": "string"
+                },
+                "id": {
+                    "description": "MongoDB의 ObjectId로 매핑",
+                    "type": "string"
+                },
+                "is_completed": {
+                    "description": "완료 여부",
+                    "type": "boolean"
+                },
+                "updated_at": {
+                    "description": "수정 시간",
+                    "type": "string"
+                }
+            }
+        },
+        "main.UpdateTodoRequest": {
+            "type": "object",
+            "properties": {
+                "content": {
+                    "type": "string"
+                },
+                "is_completed": {
+                    "type": "boolean"
                 }
             }
         }
