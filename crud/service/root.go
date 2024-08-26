@@ -1,7 +1,7 @@
 package service
 
 import (
-	"go-crud/repository"
+	"crud/repository"
 	"sync"
 )
 

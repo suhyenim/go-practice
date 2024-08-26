@@ -44,6 +44,12 @@ type DeleteUserResquest struct {
 	Name string `json:"name" binding:"required"`
 }
 
+func (c *DeleteUserResquest) ToUser() *User {
+	return &User{
+		Name: c.Name,
+	}
+}
+
 type DeleteUserResponse struct {
 	*ApiResponse
 }

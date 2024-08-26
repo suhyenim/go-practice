@@ -1,10 +1,10 @@
 package network
 
 import (
+	"crud/service"
+	"crud/types"
 	"fmt"
 	"github.com/gin-gonic/gin"
-	"go-crud/service"
-	"go-crud/types"
 	"sync"
 )
 
@@ -64,19 +64,35 @@ func (u *userRouter) get(c *gin.Context) {
 func (u *userRouter) update(c *gin.Context) {
 	var req types.UpdateUserResquest
 
-	u.userService.Update(nil, nil)
-
-	u.router.okResponse(c, &types.UpdateUserResponse{
-		ApiResponse: types.NewApiResponse("성공입니다.", 1, nil),
-	})
+	if err := c.ShouldBindJSON(&req); err != nil {
+		u.router.failedResponse(c, &types.UpdateUserResponse{
+			ApiResponse: types.NewApiResponse("바인딩 오류입니다.", -1, err.Error()),
+		})
+	} else if err = u.userService.Update(req.Name, req.UpdatedAge); err != nil {
+		u.router.failedResponse(c, &types.UpdateUserResponse{
+			ApiResponse: types.NewApiResponse("Update 에러 입니다.", -1, err.Error()),
+		})
+	} else {
+		u.router.okResponse(c, &types.UpdateUserResponse{
+			ApiResponse: types.NewApiResponse("성공입니다.", 1, nil),
+		})
+	}
 }
 
 func (u *userRouter) delete(c *gin.Context) {
 	var req types.DeleteUserResquest
 
-	u.userService.Delete(nil)
-
-	u.router.okResponse(c, &types.DeleteUserResponse{
-		ApiResponse: types.NewApiResponse("성공입니다.", 1, nil),
-	})
+	if err := c.ShouldBindJSON(&req); err != nil {
+		u.router.failedResponse(c, &types.DeleteUserResponse{
+			ApiResponse: types.NewApiResponse("바인딩 오류입니다.", -1, err.Error()),
+		})
+	} else if err = u.userService.Delete(req.ToUser()); err != nil {
+		u.router.failedResponse(c, &types.DeleteUserResponse{
+			ApiResponse: types.NewApiResponse("Delete 에러 입니다.", -1, err.Error()),
+		})
+	} else {
+		u.router.okResponse(c, &types.DeleteUserResponse{
+			ApiResponse: types.NewApiResponse("성공입니다.", 1, nil),
+		})
+	}
 }

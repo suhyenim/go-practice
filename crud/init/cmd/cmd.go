@@ -1,10 +1,10 @@
 package cmd
 
 import (
-	"go-crud/config"
-	"go-crud/network"
-	"go-crud/repository"
-	"go-crud/service"
+	"crud/config"
+	"crud/network"
+	"crud/repository"
+	"crud/service"
 )
 
 type Cmd struct {

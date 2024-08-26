@@ -1,8 +1,8 @@
 package network
 
 import (
+	"crud/service"
 	"github.com/gin-gonic/gin"
-	"go-crud/service"
 )
 
 type Network struct {
